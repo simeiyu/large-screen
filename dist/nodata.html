@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vmware-大屏</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/jQuery-2.1.4.min.js"></script>
+  <script src="js/echarts.min.js"></script>
+  <script src="js/echarts-liquidfill.min.js"></script>
+  <script src="js/china.js"></script>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div class="logo"><img src="images/logo.png" alt="数据中心资源展示屏" /></div>
+      <div class="header-title"><h2 data-text="数据中心资源展示屏">数据中心资源展示屏</h2></div>
+      <div class="timekeeper">
+        <i class="iconfont vmtp-time"></i>
+        <span class="date" id="systemDate"></span>
+        <span class="time" id="systemTime"></span>
+      </div>
+    </div>
+    <div class="content">
+        <div class="left">
+          <div class="usage">
+            <div class="title-type-1">
+              <h3 class="title">资源使用情况</h3>
+              <span class="bias"></span>
+            </div>
+            <!-- CPU -->
+            <div class="usage-panel">
+              <div class="usage-panel-header title-type-2">
+                <h4 class="title">CPU</h4>
+                <span class="total">共 --</span>
+              </div>
+              <div class="usage-panel-body">
+                <div class="usage-info">
+                  <ul class="usage-info-list"><li class="usage-info-item usage-info-item-used">
+                      已使用
+                      <span>---</span>
+                    </li>
+                    <li class="usage-info-item">
+                      未使用
+                      <span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="usage-echart">
+                  <div class="usage-echart-liquidfill nodata" id="liquidfill-cpu"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 存储 -->
+            <div class="usage-panel">
+              <div class="usage-panel-header title-type-2">
+                <h4 class="title">存储</h4>
+                <span class="total">共 --</span>
+              </div>
+              <div class="usage-panel-body">
+                <div class="usage-info">
+                  <ul class="usage-info-list">
+                    <li class="usage-info-item usage-info-item-used">
+                      已使用
+                      <span>---</span>
+                    </li>
+                    <li class="usage-info-item">
+                      未使用
+                      <span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="usage-echart">
+                  <div class="usage-echart-liquidfill nodata" id="liquidfill-storager"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 内存 -->
+            <div class="usage-panel">
+              <div class="usage-panel-header title-type-2">
+                <h4 class="title">内存</h4>
+                <span class="total">共 --</span>
+              </div>
+              <div class="usage-panel-body">
+                <div class="usage-info">
+                  <ul class="usage-info-list">
+                    <li class="usage-info-item usage-info-item-used">
+                      已使用
+                      <span>---</span>
+                    </li>
+                    <li class="usage-info-item">
+                      未使用
+                      <span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="usage-echart">
+                  <div class="usage-echart-liquidfill nodata" id="liquidfill-ram"></div>
+                </div>
+              </div>
+            </div>
+            <!-- IP -->
+            <div class="usage-panel">
+              <div class="usage-panel-header title-type-2">
+                <h4 class="title">IP</h4>
+                <span class="total">共 --</span>
+              </div>
+              <div class="usage-panel-body">
+                <div class="usage-info">
+                  <ul class="usage-info-list">
+                    <li class="usage-info-item usage-info-item-used">
+                      已使用
+                      <span>---</span>
+                    </li>
+                    <li class="usage-info-item">
+                      未使用
+                      <span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="usage-echart">
+                  <div class="usage-echart-liquidfill nodata" id="liquidfill-ip"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="center">
+          <!-- 地图 -->
+          <div class="map">
+            <div class="map-echart nodata" id="map"></div>
+          </div>
+          <div class="trend">
+            <!-- CPU和内存 -->
+            <div class="panel">
+                <div class="panel-title title-type-1">
+                  <span class="tip">30天</span>
+                  <h3 class="title">CPU&内存使用趋势</h3>
+                  <span class="bias"></span>
+                  <ul class="trend-legend">
+                    <li class="trend-legend-cpu">CPU</li>
+                    <li class="trend-legend-ram">内存</li>
+                  </ul>
+                </div>
+              <div class="panel-body">
+                <div class="trend-echart nodata" id="line-cpu-ram"></div>
+              </div>
+            </div>
+            <!-- 存储和快照 -->
+            <div class="panel">
+              <div class="panel-title title-type-1">
+                <span class="tip">30天</span>
+                <h3 class="title">存储&快照使用趋势</h3>
+                <span class="bias"></span>
+                <ul class="trend-legend">
+                  <li class="trend-legend-storager">存储</li>
+                  <li class="trend-legend-snap">快照</li>
+                </ul>
+              </div>
+              <div class="panel-body">
+                <div class="trend-echart nodata" id="line-storager-snap"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <!-- 虚拟资源动态 -->
+          <div class="dynamic">
+            <div class="title-type-1">
+              <span class="tip">30天</span>
+              <h3 class="title">虚拟资源动态</h3>
+              <span class="bias"></span>              
+            </div>
+            <div class="dynamic-body">
+              <div class="dynamic-echart">
+                <div class="dynamic-echart-pie nodata" id="virtual-resource"></div>
+              </div>
+              <div class="dynamic-info">
+                <ul class="dynamic-info-list">
+                  <li class="dynamic-info-item">
+                    <h5>--- <span class="dynamic-info-unit"></span></h5>
+                    释放云主机
+                  </li>
+                  <li class="dynamic-info-item">
+                    <h5>--- <span class="dynamic-info-unit"></span></h5>
+                    释放云硬盘总量
+                  </li>
+                  <li class="dynamic-info-item">
+                    <h5>--- <span class="dynamic-info-unit"></span></h5>
+                    新增云硬盘总容量
+                  </li>
+                  <li class="dynamic-info-item">
+                    <h5>--- <span class="dynamic-info-unit"></span></h5>
+                    新增快照容量
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- 资源运行状态 -->
+          <div class="running">
+            <div class="title-type-1">
+              <h3 class="title">资源运行状态</h3>
+              <span class="bias"></span>              
+            </div>
+            <div class="running-body">
+              <!-- 主机 -->
+              <div class="running-box">
+                <div class="running-box-title">
+                  主机: <span class="running-box-total">---</span>
+                </div>
+                <div class="running-box-state">
+                  <ul class="running-state-legend">
+                    <li class="running-working">
+                      运行中：<span>---</span>
+                    </li>
+                    <li class="running-off">
+                      关机中：<span>---</span>
+                    </li>
+                    <li class="running-unkown">
+                      未知：<span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="running-box-progress">
+                  <ul class="running-state-charts">
+                    <li class="running-working" style="width: 0%"></li>
+                    <li class="running-off" style="width: 0%"></li>
+                    <li class="running-unkown" style="width: 0%"></li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 云主机 -->
+              <div class="running-box">
+                <div class="running-box-title">
+                  云主机: <span class="running-box-total">---</span>
+                </div>
+                <div class="running-box-state">
+                  <ul class="running-state-legend">
+                    <li class="running-working">
+                      运行中：<span>---</span>
+                    </li>
+                    <li class="running-off">
+                      关机中：<span>---</span>
+                    </li>
+                    <li class="running-unkown">
+                      未知：<span>---</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="running-box-progress">
+                  <ul class="running-state-charts">
+                    <li class="running-working" style="width: 0%"></li>
+                    <li class="running-off" style="width: 0%"></li>
+                    <li class="running-unkown" style="width: 0%"></li>
+                  </ul>
+                </div>
+              </div>
+              <!-- 快照、存储、网络 -->
+              <ul class="running-resource">
+                <li class="running-resource-item">
+                  <i class="iconfont vmtp-photo"></i>
+                  <h5 class="running-resource-acount">5000G</h5>
+                  当前快照容量
+                </li>
+                <li class="running-resource-item">
+                  <i class="iconfont vmtp-storage"></i>
+                  <h5 class="running-resource-acount">100台</h5>
+                  存储
+                </li>
+                <li class="running-resource-item">
+                  <i class="iconfont vmtp-net"></i>
+                  <h5 class="running-resource-acount">300个</h5>
+                  网络
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- 资源实时监控 -->
+          <div class="monitor">
+            <div class="title-type-1">
+              <h3 class="title">资源实时监控</h3>
+              <span class="bias"></span>              
+            </div>
+            <div class="monitor-body">
+              <ul class="monitor-list">
+                <li class="monitor-item active nodata">
+                    <ul>
+                      <li class="monitor-title"></li>
+                      <li class="monitor-date"></li>
+                      <li class="monitor-time"></li>
+                    </ul>
+                    <p class="monitor-message">  <span class="monitor-name"></span>  <span class="monitor-percent"></span></p>
+                </li>
+                <li class="monitor-item nodata">
+                    <ul>
+                      <li class="monitor-title"></li>
+                      <li class="monitor-date"></li>
+                      <li class="monitor-time"></li>
+                    </ul>
+                    <p class="monitor-message">  <span class="monitor-name"></span>  <span class="monitor-percent"></span></p>
+                </li>
+                <li class="monitor-item nodata">
+                    <ul>
+                      <li class="monitor-title"></li>
+                      <li class="monitor-date"></li>
+                      <li class="monitor-time"></li>
+                    </ul>
+                    <p class="monitor-message">  <span class="monitor-name"></span>  <span class="monitor-percent"></span></p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <!-- <script src="js/echart_map.js"></script>
+  <script src="js/echart_line.js"></script>
+  <script src="js/echart_liquidFill.js"></script>
+  <script src="js/echart_pie.js"></script> -->
+  <script>
+    $(function(){
+        // 系统时间
+        function systemTime() {
+            var date = new Date();
+            var yy = date.getFullYear(),
+                mm = date.getMonth() + 1,
+                dd = date.getDate(),
+                hour = date.getHours(),
+                min = date.getMinutes(),
+                sc = date.getSeconds();
+                
+            mm.toString().length == 1 ? mm = '0' + mm : null;
+            dd.toString().length == 1 ? dd = '0' + dd : null;
+            hour.toString().length == 1 ? hour = '0' + hour : null;
+            min.toString().length == 1 ? min = '0' + min : null;
+            sc.toString().length == 1 ? sc = '0' + sc : null;
+
+            var nowDate = yy + "-" + mm + "-" + dd;
+            var nowTime = hour + ":" + min + ":" + sc;
+
+            document.getElementById("systemDate").innerHTML = nowDate;
+            document.getElementById("systemTime").innerHTML = nowTime;
+
+            setTimeout(systemTime, 500);
+        }
+        systemTime();
+
+    });
+  </script>
+</body>
+</html>

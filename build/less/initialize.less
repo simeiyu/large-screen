@@ -1,0 +1,36 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: "PingFang MD";
+  src: url('./font/PingFang Medium.TTF') format('truetype');
+}
+html,
+body,
+.page {
+  width: 1920px;
+  height: 1080px;
+  // width: 100%;
+  // height: 100%;
+  min-height: 768px;
+  min-width: 1366px;
+  font-family: "PingFang MD","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857;
+}
+.clearfix:after {
+  content: "";
+  display: block;
+  height: 0;
+  line-height: 0;
+  clear: both;
+  zoom: 1;
+  visibility: hidden;
+}
+ul, ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
